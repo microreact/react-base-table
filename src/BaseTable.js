@@ -511,6 +511,7 @@ class BaseTable extends React.PureComponent {
             onResizeStart={this._handleColumnResizeStart}
             onResizeStop={this._handleColumnResizeStop}
             onResize={this._handleColumnResize}
+            onExpand={this.props.onColumnExpand}
           />
         )}
       </Tag>
@@ -1225,6 +1226,7 @@ BaseTable.propTypes = {
    * ```
    */
   sortState: PropTypes.object,
+  onColumnExpand: PropTypes.func,
   /**
    * A callback function for the header cell click event
    * The handler is of the shape of `({ column, key, order }) => *`

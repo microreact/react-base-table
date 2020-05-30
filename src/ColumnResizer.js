@@ -54,6 +54,8 @@ const eventsFor = {
 
 let dragEventFor = eventsFor.mouse;
 
+let lastClick = null;
+
 /**
  * ColumnResizer for BaseTable
  */
@@ -88,7 +90,7 @@ class ColumnResizer extends React.PureComponent {
   }
 
   render() {
-    const { style, column, onResizeStart, onResize, onResizeStop, minWidth, ...rest } = this.props;
+    const { style, column, onResizeStart, onResize, onResizeStop, minWidth, onExpand, ...rest } = this.props;
 
     return (
       <div
@@ -122,6 +124,13 @@ class ColumnResizer extends React.PureComponent {
   }
 
   _handleMouseDown(e) {
+    const thisClick = new Date().valueOf();
+    const diff = thisClick - lastClick;
+    lastClick = thisClick;
+    if (lastClick && diff < 500) {
+      this.props.onExpand && this.props.onExpand(this.props.column);
+      return;
+    }
     dragEventFor = eventsFor.mouse;
     this._handleDragStart(e);
   }
@@ -219,6 +228,7 @@ ColumnResizer.propTypes = {
    * The column object to be dragged
    */
   column: PropTypes.object,
+  onExpand: PropTypes.func,
   /**
    * A callback function when resizing started
    * The callback is of the shape of `(column) => *`
